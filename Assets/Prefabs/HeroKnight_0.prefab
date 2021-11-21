@@ -70,7 +70,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1999170767121898401}
   - component: {fileID: 1999170767121898400}
-  - component: {fileID: 1999170767121898407}
   - component: {fileID: 1999170767121898406}
   - component: {fileID: 1999170767121898403}
   - component: {fileID: 1999170767121898402}
@@ -149,22 +148,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &1999170767121898407
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1999170767121898405}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.010665417, y: 0.69917893}
-  m_Size: {x: 0.5043783, y: 1.2886062}
-  m_Direction: 0
 --- !u!50 &1999170767121898406
 Rigidbody2D:
   serializedVersion: 4
@@ -201,6 +184,7 @@ MonoBehaviour:
   controller: {fileID: 1999170767121898402}
   runSpeed: 20
   jumpForce: 8
+  dodgeForce: 0
   isGroundedChecker: {fileID: 1999170766503189927}
   checkGroundRadius: 0.3
   groundLayer:
