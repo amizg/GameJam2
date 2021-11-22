@@ -24,8 +24,10 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        currHealth -= damage;
-        animator.SetTrigger("Hit");
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Skeleton_Attack")) {
+            currHealth -= damage;
+            animator.SetTrigger("Hit");
+        }
 
         if (currHealth <= 0) {
             Die();
@@ -35,9 +37,13 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        GetComponent<SkeletonBehavior>().enabled = false;
+
         //Die animation and disable
         animator.SetTrigger("Die");
+
         
+     
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
     }
