@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour {
     void Update()
     {
         //Get directional input
-        move = Input.GetAxis("Horizontal") * runSpeed * Time.fixedDeltaTime;
+        move = Input.GetAxisRaw("Horizontal") * runSpeed * Time.fixedDeltaTime;
         yVelocity = rb.velocity.y;
 
         animator.SetFloat("AirSpeedY", yVelocity);

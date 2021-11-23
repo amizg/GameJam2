@@ -2,21 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkeletonBehavior : MonoBehaviour
-{    
-    public Transform rayCast;
-    public LayerMask rayCastMask;
-    public float rayCastLength;
+public class SkeletonBehavior : MonoBehaviour {
+    public Transform leftLimit;
+    public Transform rightLimit;
     public float attackDistance; // min attack distance
     public float moveSpeed;
     public float timer; // cooldown tiemr for attacks
+    [HideInInspector] public Transform target;
+    [HideInInspector] public bool inRange;
+    public GameObject combatZone;
+    public GameObject triggerArea;
 
-    private RaycastHit2D hit;
-    private GameObject target;
     private Animator animator;
     private float distance; // distance from player
     private bool attacking;
-    private bool inRange;
     private bool cooldown;
     private float intTimer;
 
@@ -29,34 +28,29 @@ public class SkeletonBehavior : MonoBehaviour
     {
         intTimer = timer;
         animator = GetComponent<Animator>();
+        SelectTarget();
     }
 
     void Update()
     {
-        if (inRange) {
-            hit = Physics2D.Raycast(rayCast.position, Vector2.left, rayCastLength, rayCastMask);
-            RayCastDebugger();
+        if (!attacking) {
+            Move();
         }
 
-        if(hit.collider != null) {
-            EnemyBehavior();
-        }
-        else if (hit.collider == null) {
-            inRange = false;
+        if(!InsideofLimits() && !inRange && !animator.GetCurrentAnimatorStateInfo(0).IsName("Skeleton_Attack")) {
+            SelectTarget();
         }
         
-        if (inRange == false) {
-            animator.SetBool("canWalk", false);
-            StopAttack();
+        if (inRange == true) {
+            EnemyBehavior();
         }
     }
 
     void EnemyBehavior()
     {
-        distance = Vector2.Distance(transform.position, target.transform.position);
+        distance = Vector2.Distance(transform.position, target.position);
 
         if (distance > attackDistance) {
-            Move();
             StopAttack();
         }
         else if(attackDistance >= distance && !cooldown){
@@ -72,18 +66,9 @@ public class SkeletonBehavior : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player") {
-            target = other.gameObject;
+            target = other.transform;
             inRange = true;
-        }
-    }
-
-    void RayCastDebugger()
-    {
-        if(distance > attackDistance) {
-            Debug.DrawRay(rayCast.position, Vector2.left * rayCastLength, Color.red);
-        }
-        else if(attackDistance > distance) {
-            Debug.DrawRay(rayCast.position, Vector2.left * rayCastLength, Color.green);
+            Flip();
         }
     }
 
@@ -93,7 +78,7 @@ public class SkeletonBehavior : MonoBehaviour
 
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Skeleton_Attack")) {
             
-            Vector2 targetPosition = new Vector2(target.transform.position.x, transform.position.y);
+            Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
 
             transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
@@ -142,5 +127,37 @@ public class SkeletonBehavior : MonoBehaviour
         }
     }
 
+    private bool InsideofLimits()
+    {
+        return transform.position.x > leftLimit.position.x && transform.position.x < rightLimit.position.x;
+    }
 
+    public void SelectTarget()
+    {
+        float distanceToLeft = Vector2.Distance(transform.position, leftLimit.position);
+        float distanceToRight = Vector2.Distance(transform.position, rightLimit.position);
+
+        if (distanceToLeft > distanceToRight) {
+            target = leftLimit;
+        }
+        else {
+            target = rightLimit;
+        }
+
+        Flip();
+    }
+
+    public void Flip()
+    {
+        Vector3 rotation = transform.eulerAngles;
+
+        if (transform.position.x > target.position.x) {
+            rotation.y = 180f;
+        }
+        else {
+            rotation.y = 0f;
+        }
+
+        transform.eulerAngles = rotation;
+    }
 }
