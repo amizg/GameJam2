@@ -34,15 +34,19 @@ public class PlayerController : MonoBehaviour {
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
 
-    private Rigidbody2D rb;
+    public int maxHealth;
+    private int currHealth;
 
+    private Rigidbody2D rb;
     public Animator animator;
+
+    private bool invul = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        currHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
-
         InvokeRepeating("AttackTimer", 0.1f, 0.4f);
     }
 
@@ -136,14 +140,16 @@ public class PlayerController : MonoBehaviour {
             if (move < 0) rb.AddForce(new Vector2(-dodgeForce, 0));
             animator.SetTrigger("Roll");
             isRolling = true;
+            invul = true;
 
         }
-        if (isRolling) Invoke("resetRoll", 1.0f);
+        if (isRolling) Invoke("resetRoll", 0.5f);
     }
 
     void resetRoll()
     {
         isRolling = false;
+        invul = false;
     }
 
     void Attack()
@@ -212,15 +218,37 @@ public class PlayerController : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Mouse1) && isGrounded) {
             animator.SetTrigger("Block");
+            isBlocking = true;
+            invul = true;
         }
         else if (Input.GetKey(KeyCode.Mouse1) && isGrounded) {
             animator.SetBool("IdleBlock", true);
             isBlocking = true;
+            invul = true;
         }
         else if (Input.GetKeyUp(KeyCode.Mouse1) && isGrounded) {
             animator.SetBool("IdleBlock", false);
             isBlocking = false;
+            invul = false;
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (!invul) {
+            currHealth -= damage;
+            animator.SetTrigger("Hurt");
+        }
+
+        if (currHealth <= 0) {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        animator.SetTrigger("Death");
+        this.enabled = false;
     }
 
     //void CheckIfOnWall()

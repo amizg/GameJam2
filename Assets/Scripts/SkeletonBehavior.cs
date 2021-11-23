@@ -20,6 +20,11 @@ public class SkeletonBehavior : MonoBehaviour
     private bool cooldown;
     private float intTimer;
 
+    public Transform attackPoint;
+    public float attackRange = 0.5f;
+    public LayerMask playerLayers;
+
+
     private void Awake()
     {
         intTimer = timer;
@@ -126,6 +131,15 @@ public class SkeletonBehavior : MonoBehaviour
     public void TriggerCooldown()
     {
         cooldown = true;
+    }
+
+    public void DealDamage()
+    {
+        Collider2D[] hitPlayers = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayers);
+
+        foreach (Collider2D player in hitPlayers) {
+            player.GetComponent<PlayerController>().TakeDamage(2);
+        }
     }
 
 
