@@ -37,14 +37,12 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        GetComponent<SkeletonBehavior>().enabled = false;
-
         //Die animation and disable
         animator.SetTrigger("Die");
 
-        
-     
-        GetComponent<Collider2D>().enabled = false;
+        Destroy(gameObject, 1f);
         this.enabled = false;
+        GetComponent<SkeletonBehavior>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
     }
 }

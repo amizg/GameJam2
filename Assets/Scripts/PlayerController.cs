@@ -5,25 +5,22 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public CharacterController2D controller;
-    //public DeathMenu deathMenuUI;
-
     public float runSpeed;
     public float jumpForce;
-    public float dodgeForce;
+    public float dodgeForce
+        ;
     public Transform isGroundedChecker;
-    //public Transform isOnWallChecker;
     public float checkGroundRadius;
-    //public float checkWallRadius;
     public LayerMask groundLayer;
 
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
     public float rememberGroundedFor;
     float lastTimeGrounded;
+
     bool isGrounded = false;
     bool isBlocking = false;
     bool isRolling = false;
-    //bool isOnWall = false;
     public bool isAlive = true;
 
     private float move;
@@ -59,7 +56,7 @@ public class PlayerController : MonoBehaviour {
 
         animator.SetFloat("AirSpeedY", yVelocity);
 
-        if (Mathf.Abs(move) >= 0.1 && isGrounded ) animator.SetInteger("AnimState", 1);
+        if (Mathf.Abs(move) >= 0.1 && isGrounded) animator.SetInteger("AnimState", 1);
         if (Mathf.Abs(move) < 0.1) animator.SetInteger("AnimState", 0);
 
         if (isGrounded) {
@@ -71,6 +68,9 @@ public class PlayerController : MonoBehaviour {
 
         CheckIfGrounded();
 
+        if (isGrounded) {
+            Block();
+        }
         if (!isBlocking) {
             Move(move);
             Jump();
@@ -82,22 +82,11 @@ public class PlayerController : MonoBehaviour {
                 Attack();
             }
         }
-        Block();
 
+        if (isBlocking) {
+            Move(0);
+        }
 
-
-        //CheckIfOnWall();
-
-        //if (!isOnWall) {
-        //    animator.SetBool("WallSlide", false);
-        //}
-
-        //if (isOnWall && !isGrounded) {
-        //    animator.SetInteger("AnimState", 0);
-        //    animator.SetBool("WallSlide", true);
-        //    animator.SetBool("Grounded", false);
-        //    Debug.Log("WallSlide");
-        //}
     }
 
     void FixedUpdate()
@@ -141,7 +130,6 @@ public class PlayerController : MonoBehaviour {
             animator.SetTrigger("Roll");
             isRolling = true;
             invul = true;
-
         }
         if (isRolling) Invoke("resetRoll", 0.5f);
     }
@@ -250,15 +238,4 @@ public class PlayerController : MonoBehaviour {
         animator.SetTrigger("Death");
         this.enabled = false;
     }
-
-    //void CheckIfOnWall()
-    //{
-    //    Collider2D colliders = Physics2D.OverlapCircle(isOnWallChecker.position, checkWallRadius, groundLayer);
-    //    if (colliders != null) {
-    //        isOnWall = true;
-    //    }
-    //    else {
-    //        isOnWall = false;
-    //    }
-    //}
 }
