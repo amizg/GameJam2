@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Skeleton_Attack")) {
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack")) {
             currHealth -= damage;
             animator.SetTrigger("Hit");
         }
@@ -42,7 +42,5 @@ public class Enemy : MonoBehaviour
 
         Destroy(gameObject, 1f);
         this.enabled = false;
-        GetComponent<SkeletonBehavior>().enabled = false;
-        GetComponent<Collider2D>().enabled = false;
     }
 }
