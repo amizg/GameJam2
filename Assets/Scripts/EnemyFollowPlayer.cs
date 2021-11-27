@@ -34,11 +34,12 @@ public class EnemyFollowPlayer : MonoBehaviour
     {
         float distanceFromPlayer = Vector2.Distance(player.position, transform.position);
 
-        if(distanceFromPlayer < lineOfSight && distanceFromPlayer > combatRange) {
+        if(distanceFromPlayer < lineOfSight && distanceFromPlayer > combatRange && !cooldown) {
             cooldown = false;
             attacking = false;
 
             transform.position = Vector2.MoveTowards(this.transform.position, player.position, speed * Time.deltaTime);
+
             animator.SetBool("canAttack", false);
             Flip();
         }

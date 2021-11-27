@@ -28,6 +28,9 @@ public class Enemy : MonoBehaviour
             currHealth -= damage;
             animator.SetTrigger("Hit");
         }
+        else if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack")) {
+            return;
+        }
 
         if (currHealth <= 0) {
             Die();

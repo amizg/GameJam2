@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkeletonBehavior : MonoBehaviour {
+public class BossBehavior : MonoBehaviour {
     public Transform leftLimit;
     public Transform rightLimit;
     public float attackDistance; // min attack distance
+    
+    public float castDistance; //distance for cast
+    public Transform castArea;
+
     public float moveSpeed;
     public float timer; // cooldown tiemr for attacks
     [HideInInspector] public Transform target;
@@ -39,10 +43,10 @@ public class SkeletonBehavior : MonoBehaviour {
             Move();
         }
 
-        if(!InsideofLimits() && !inRange && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack")) {
+        if (!InsideofLimits() && !inRange && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack")) {
             SelectTarget();
         }
-        
+
         if (inRange == true) {
             EnemyBehavior();
         }
@@ -55,7 +59,7 @@ public class SkeletonBehavior : MonoBehaviour {
         if (distance > attackDistance) {
             StopAttack();
         }
-        else if(attackDistance >= distance && !cooldown){
+        else if (attackDistance >= distance && !cooldown) {
             Attack();
         }
 
@@ -79,7 +83,7 @@ public class SkeletonBehavior : MonoBehaviour {
         animator.SetBool("canWalk", true);
 
         if (!animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack")) {
-            
+
             Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
 
             transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
@@ -161,5 +165,11 @@ public class SkeletonBehavior : MonoBehaviour {
         }
 
         transform.eulerAngles = rotation;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }
