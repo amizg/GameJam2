@@ -228,8 +228,9 @@ public class PlayerController : MonoBehaviour {
             animator.SetTrigger("Hurt");
         }
 
-        if (currHealth <= 0) {
+        if (currHealth <= 0 && !invul) {
             Die();
+            invul = true;
         }
     }
 

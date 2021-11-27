@@ -7,11 +7,14 @@ public class BossBehavior : MonoBehaviour {
     public Transform rightLimit;
     public float attackDistance; // min attack distance
     
-    public float castDistance; //distance for cast
-    public Transform castArea;
+    public float castMaxDistance; //distance for cast
+    public float castMinDistance;
+    public GameObject spellPrefab;
+    public Transform player;
 
     public float moveSpeed;
-    public float timer; // cooldown tiemr for attacks
+    public float timer; // cooldown timer for attacks
+    public float castTimer;
     [HideInInspector] public Transform target;
     [HideInInspector] public bool inRange;
     public GameObject combatZone;
@@ -23,7 +26,9 @@ public class BossBehavior : MonoBehaviour {
     private float distance; // distance from player
     private bool attacking;
     private bool cooldown;
+    private bool castCooldown;
     private float intTimer;
+    private float intCastTimer;
 
     public Transform attackPoint;
     public float attackRange = 0.5f;
@@ -33,6 +38,7 @@ public class BossBehavior : MonoBehaviour {
     private void Awake()
     {
         intTimer = timer;
+        intCastTimer = castTimer;
         animator = GetComponent<Animator>();
         SelectTarget();
     }
@@ -56,8 +62,11 @@ public class BossBehavior : MonoBehaviour {
     {
         distance = Vector2.Distance(transform.position, target.position);
 
-        if (distance > attackDistance) {
+        if (distance > attackDistance && castCooldown) {
             StopAttack();
+        }
+        else if (distance > castMinDistance && distance <= castMaxDistance && !castCooldown) {
+            Spell();
         }
         else if (attackDistance >= distance && !cooldown) {
             Attack();
@@ -66,6 +75,10 @@ public class BossBehavior : MonoBehaviour {
         if (cooldown) {
             Cooldown();
             animator.SetBool("Attack", false);
+        }
+        if (castCooldown) {
+            CastCooldown();
+            animator.SetBool("Cast", false);
         }
     }
 
@@ -106,6 +119,7 @@ public class BossBehavior : MonoBehaviour {
         attacking = false;
 
         animator.SetBool("Attack", false);
+        animator.SetBool("Cast", false);
     }
 
     void Cooldown()
@@ -119,9 +133,21 @@ public class BossBehavior : MonoBehaviour {
 
     }
 
+    void CastCooldown()
+    {
+        castTimer -= Time.deltaTime;
+
+        if (castTimer <= 0 && castCooldown) {
+            castCooldown = false;
+            castTimer = intCastTimer;
+        }
+
+    }
+
     public void TriggerCooldown()
     {
         cooldown = true;
+        castCooldown = true;
     }
 
     public void DealDamage()
@@ -167,9 +193,25 @@ public class BossBehavior : MonoBehaviour {
         transform.eulerAngles = rotation;
     }
 
+    private void Spell()
+    {
+        castTimer = intCastTimer;
+        attacking = true;
+
+        animator.SetBool("canWalk", false);
+        animator.SetBool("Cast", true);
+    }
+
+    public void SpawnSpell()
+    {
+        Instantiate(spellPrefab, new Vector3(player.transform.position.x, player.transform.position.y + 2.4f, 0), Quaternion.identity);
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(transform.position, castMinDistance);
+        Gizmos.DrawWireSphere(transform.position, castMaxDistance);
     }
 }
