@@ -8,7 +8,6 @@ public class BossBehavior : MonoBehaviour {
     public float attackDistance; // min attack distance
     
     public float castMaxDistance; //distance for cast
-    public float castMinDistance;
     public GameObject spellPrefab;
     public Transform player;
 
@@ -65,7 +64,7 @@ public class BossBehavior : MonoBehaviour {
         if (distance > attackDistance && castCooldown) {
             StopAttack();
         }
-        else if (distance > castMinDistance && distance <= castMaxDistance && !castCooldown) {
+        else if (distance > attackDistance && distance <= castMaxDistance && !castCooldown) {
             Spell();
         }
         else if (attackDistance >= distance && !cooldown) {
@@ -211,7 +210,6 @@ public class BossBehavior : MonoBehaviour {
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
-        Gizmos.DrawWireSphere(transform.position, castMinDistance);
         Gizmos.DrawWireSphere(transform.position, castMaxDistance);
     }
 }

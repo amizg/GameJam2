@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 454587020234918105}
   m_Layer: 9
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -750047184722822154, guid: 1914d95466e3d4341a618c35a56d5f82, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -105,10 +105,12 @@ MonoBehaviour:
   leftLimit: {fileID: 0}
   rightLimit: {fileID: 0}
   attackDistance: 3
-  castDistance: 0
-  castArea: {fileID: 0}
+  castMaxDistance: 12
+  spellPrefab: {fileID: 7142542402439357342, guid: bb1ae60bee9690746b657659929f5c86, type: 3}
+  player: {fileID: 0}
   moveSpeed: 2
   timer: 0.5
+  castTimer: 4
   target: {fileID: 0}
   inRange: 0
   combatZone: {fileID: 454587020839817633}

@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 7200119911318798580}
   m_Layer: 9
   m_Name: Skeleton
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -230,7 +230,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.029523969, y: -0.25627366}
+  m_Offset: {x: 0.029523969, y: -0.23966195}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -241,7 +241,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.20488495, y: 0.0047360063}
+  m_Size: {x: 0.20488495, y: 0.037959427}
   m_EdgeRadius: 0
 --- !u!114 &7200119911318798581
 MonoBehaviour:
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 7200119911318798578}
-  maxHealth: 10
+  maxHealth: 20
 --- !u!114 &7200119911318798580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,6 +278,7 @@ MonoBehaviour:
   inRange: 0
   combatZone: {fileID: 7200119911767911936}
   triggerArea: {fileID: 7200119910173643845}
+  damage: 1
   attackPoint: {fileID: 7200119911481865382}
   attackRange: 0.5
   playerLayers:
@@ -358,7 +359,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.012547553, y: -0.14396703}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -369,7 +370,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.0250951, y: 2.0379012}
   m_EdgeRadius: 0
 --- !u!114 &7200119911767911943
 MonoBehaviour:

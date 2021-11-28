@@ -187,8 +187,8 @@ GameObject:
   - component: {fileID: 1181208318005784258}
   - component: {fileID: 8327024171655815535}
   m_Layer: 9
-  m_Name: Bandit 1
-  m_TagString: Untagged
+  m_Name: Bandit
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -353,7 +353,7 @@ MonoBehaviour:
   leftLimit: {fileID: 0}
   rightLimit: {fileID: 0}
   attackDistance: 1.25
-  moveSpeed: 2
+  moveSpeed: 3
   timer: 2
   target: {fileID: 0}
   inRange: 0
