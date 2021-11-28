@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - Ground
+  - Damage
+  - Speed
+  - Checkpoint
   layers:
   - Default
   - TransparentFX

@@ -7,8 +7,9 @@ public class PlayerController : MonoBehaviour {
     public CharacterController2D controller;
     public float runSpeed;
     public float jumpForce;
-    public float dodgeForce
-        ;
+    public float dodgeForce;
+    private int damageMul = 1;
+
     public Transform isGroundedChecker;
     public float checkGroundRadius;
     public LayerMask groundLayer;
@@ -37,12 +38,16 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     public Animator animator;
 
+    public Vector3 respawnPoint;
+
     private bool invul = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        respawnPoint = transform.position;
         currHealth = maxHealth;
+
         rb = GetComponent<Rigidbody2D>();
         InvokeRepeating("AttackTimer", 0.1f, 0.4f);
     }
@@ -151,7 +156,7 @@ public class PlayerController : MonoBehaviour {
                 Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
                 foreach (Collider2D enemy in hitEnemies) {
-                    enemy.GetComponent<Enemy>().TakeDamage(1);
+                    enemy.GetComponent<Enemy>().TakeDamage(1 * damageMul);
                 }
             }
             else if (attackCounter == 1 && attackTime >= 1) {
@@ -160,7 +165,7 @@ public class PlayerController : MonoBehaviour {
                 Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
                 foreach (Collider2D enemy in hitEnemies) {
-                    enemy.GetComponent<Enemy>().TakeDamage(2);
+                    enemy.GetComponent<Enemy>().TakeDamage(2 * damageMul);
                 }
             }
             else if (attackCounter == 2 && attackTime >= 2) {
@@ -169,7 +174,7 @@ public class PlayerController : MonoBehaviour {
                 Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
                 foreach (Collider2D enemy in hitEnemies) {
-                    enemy.GetComponent<Enemy>().TakeDamage(4);
+                    enemy.GetComponent<Enemy>().TakeDamage(4 * damageMul);
                 }
             }
             else if (attackCounter == 3 && attackTime >= 3) {
@@ -234,9 +239,42 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    void Die()
+    public void Die()
     {
         animator.SetTrigger("Death");
         this.enabled = false;
+
+        Invoke("Respawn", 2f);
+    }
+
+    public void CollectBuff(string buff)
+    {
+        if(buff == "damage") {
+            damageMul = 2;
+        }
+        else if (buff == "speed") {
+            runSpeed += 10;
+        }
+        else if (buff == "jump") {
+            jumpForce += 3;
+        }
+        else if(buff == "health") {
+            maxHealth += 30;
+            currHealth = maxHealth;
+        }
+    }
+
+    public void Heal(int amount)
+    {
+        if (currHealth < maxHealth) {
+            currHealth += amount;
+        }
+    }
+
+    void Respawn()
+    {
+        transform.position = respawnPoint;
+        currHealth = maxHealth;
+        animator.SetTrigger("Respawn");
     }
 }

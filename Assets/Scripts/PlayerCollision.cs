@@ -7,8 +7,10 @@ public class PlayerCollision : MonoBehaviour
     public Rigidbody2D rb;
 
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-
+        if (other.tag == "Checkpoint") {
+            controller.respawnPoint = other.transform.position;
+        }
     }
 }
