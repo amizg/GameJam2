@@ -162,4 +162,9 @@ public class SkeletonBehavior : MonoBehaviour {
 
         transform.eulerAngles = rotation;
     }
+
+    public bool isAttacking()
+    {
+        return attacking;
+    }
 }
