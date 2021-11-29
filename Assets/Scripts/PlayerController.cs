@@ -109,6 +109,9 @@ public class PlayerController : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || Time.time - lastTimeGrounded <= rememberGroundedFor)) {
             animator.SetTrigger("Jump");
+
+            CameraShake.Instance.ShakeCamera(1, .1f);
+
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
     }
@@ -136,7 +139,7 @@ public class PlayerController : MonoBehaviour {
             isRolling = true;
             invul = true;
         }
-        if (isRolling) Invoke("resetRoll", 0.5f);
+        if (isRolling) Invoke("resetRoll", 1f);
     }
 
     void resetRoll()
@@ -149,33 +152,24 @@ public class PlayerController : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Mouse0)) {
 
-            if (attackCounter == 0) {
+            if (attackCounter == 0) { 
                 animator.SetTrigger("Attack1");
                 attackCounter++;
                 attackTime = 0;
-                Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
-                foreach (Collider2D enemy in hitEnemies) {
-                    enemy.GetComponent<Enemy>().TakeDamage(1 * damageMul);
-                }
+                CameraShake.Instance.ShakeCamera(1, .1f);
             }
             else if (attackCounter == 1 && attackTime >= 1) {
                 animator.SetTrigger("Attack2");
                 attackCounter++;
-                Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
-                foreach (Collider2D enemy in hitEnemies) {
-                    enemy.GetComponent<Enemy>().TakeDamage(2 * damageMul);
-                }
+                CameraShake.Instance.ShakeCamera(1, .1f);
             }
             else if (attackCounter == 2 && attackTime >= 2) {
                 animator.SetTrigger("Attack3");
                 attackCounter++;
-                Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
-                foreach (Collider2D enemy in hitEnemies) {
-                    enemy.GetComponent<Enemy>().TakeDamage(4 * damageMul);
-                }
+                CameraShake.Instance.ShakeCamera(2, .1f);
             }
             else if (attackCounter == 3 && attackTime >= 3) {
                 attackCounter++;
@@ -184,6 +178,15 @@ public class PlayerController : MonoBehaviour {
             if (attackCounter == 4) {
                 attackCounter = 0;
             }
+        }
+    }
+
+    public void DealDamage(int damage)
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+
+        foreach (Collider2D enemy in hitEnemies) {
+            enemy.GetComponent<Enemy>().TakeDamage(damage * damageMul);
         }
     }
 
@@ -229,6 +232,7 @@ public class PlayerController : MonoBehaviour {
     public void TakeDamage(int damage)
     {
         if (!invul) {
+            CameraShake.Instance.ShakeCamera(damage, .2f);
             currHealth -= damage;
             animator.SetTrigger("Hurt");
         }
@@ -241,9 +245,8 @@ public class PlayerController : MonoBehaviour {
 
     public void Die()
     {
+        CameraShake.Instance.ShakeCamera(5f, 1f);
         animator.SetTrigger("Death");
-        this.enabled = false;
-
         Invoke("Respawn", 2f);
     }
 
