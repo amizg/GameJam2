@@ -12,5 +12,8 @@ public class PlayerCollision : MonoBehaviour
         if (other.tag == "Checkpoint") {
             controller.respawnPoint = other.transform.position;
         }
+        else if (other.tag == "Spikes") {
+            controller.Die();
+        }
     }
 }

@@ -245,9 +245,11 @@ public class PlayerController : MonoBehaviour {
 
     public void Die()
     {
+        rb.velocity = new Vector2 (0, 0);
         CameraShake.Instance.ShakeCamera(5f, 1f);
         animator.SetTrigger("Death");
         Invoke("Respawn", 2f);
+        this.enabled = false;
     }
 
     public void CollectBuff(string buff)
@@ -276,8 +278,9 @@ public class PlayerController : MonoBehaviour {
 
     void Respawn()
     {
+        animator.SetTrigger("Respawn");
         transform.position = respawnPoint;
         currHealth = maxHealth;
-        animator.SetTrigger("Respawn");
+        this.enabled = true;
     }
 }
