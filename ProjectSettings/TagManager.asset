@@ -10,6 +10,9 @@ TagManager:
   - Speed
   - Checkpoint
   - Spikes
+  - BossArea
+  - ParkourArea
+  - MainTheme
   layers:
   - Default
   - TransparentFX

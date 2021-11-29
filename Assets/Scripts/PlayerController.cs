@@ -42,9 +42,13 @@ public class PlayerController : MonoBehaviour {
 
     private bool invul = false;
 
+    private AudioManager sounds;
+
     // Start is called before the first frame update
     void Start()
     {
+        sounds = FindObjectOfType<AudioManager>();
+
         respawnPoint = transform.position;
         currHealth = maxHealth;
 
@@ -109,6 +113,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || Time.time - lastTimeGrounded <= rememberGroundedFor)) {
             animator.SetTrigger("Jump");
+            sounds.Play("PlayerJump");
 
             CameraShake.Instance.ShakeCamera(1, .1f);
 
@@ -135,7 +140,9 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.LeftShift) && Mathf.Abs(move) > 0 && isGrounded) {
             if (move > 0) rb.AddForce(new Vector2(dodgeForce, 0));
             if (move < 0) rb.AddForce(new Vector2(-dodgeForce, 0));
+            
             animator.SetTrigger("Roll");
+            
             isRolling = true;
             invul = true;
         }
@@ -157,18 +164,21 @@ public class PlayerController : MonoBehaviour {
                 attackCounter++;
                 attackTime = 0;
 
+                sounds.Play("PlayerAttack1");
                 CameraShake.Instance.ShakeCamera(1, .1f);
             }
             else if (attackCounter == 1 && attackTime >= 1) {
                 animator.SetTrigger("Attack2");
                 attackCounter++;
 
+                sounds.Play("PlayerAttack2");
                 CameraShake.Instance.ShakeCamera(1, .1f);
             }
             else if (attackCounter == 2 && attackTime >= 2) {
                 animator.SetTrigger("Attack3");
                 attackCounter++;
 
+                sounds.Play("PlayerAttack3");
                 CameraShake.Instance.ShakeCamera(2, .1f);
             }
             else if (attackCounter == 3 && attackTime >= 3) {
@@ -234,8 +244,12 @@ public class PlayerController : MonoBehaviour {
     {
         if (!invul) {
             CameraShake.Instance.ShakeCamera(damage, .2f);
+            sounds.Play("PlayerHit");
             currHealth -= damage;
             animator.SetTrigger("Hurt");
+        }
+        else if (invul && isBlocking) {
+            sounds.Play("PlayerBlock");
         }
 
         if (currHealth <= 0 && !invul) {
@@ -246,15 +260,21 @@ public class PlayerController : MonoBehaviour {
 
     public void Die()
     {
-        rb.velocity = new Vector2 (0, 0);
+        sounds.Stop("MainTheme");
+        sounds.Play("PlayerDie");
+
         CameraShake.Instance.ShakeCamera(5f, 1f);
         animator.SetTrigger("Death");
         Invoke("Respawn", 2f);
+        
+        rb.velocity = new Vector2 (0, 0);
         this.enabled = false;
     }
 
     public void CollectBuff(string buff)
     {
+        sounds.Play("BuffAcquired");
+
         if(buff == "damage") {
             damageMul = 2;
         }
@@ -279,9 +299,20 @@ public class PlayerController : MonoBehaviour {
 
     void Respawn()
     {
+        invul = false;
+        this.enabled = true;
+        sounds.Stop("ParkourTheme");
+        sounds.Stop("BossTheme");
+        sounds.Play("MainTheme");
         animator.SetTrigger("Respawn");
+
         transform.position = respawnPoint;
         currHealth = maxHealth;
-        this.enabled = true;
+
+    }
+
+    public void PlayRollSound()
+    {
+        sounds.Play("PlayerRoll");
     }
 }

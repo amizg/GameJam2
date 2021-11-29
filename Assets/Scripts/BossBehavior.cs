@@ -33,9 +33,12 @@ public class BossBehavior : MonoBehaviour {
     public float attackRange = 0.5f;
     public LayerMask playerLayers;
 
+    private AudioManager sounds;
 
     private void Awake()
     {
+        sounds = FindObjectOfType<AudioManager>();
+
         intTimer = timer;
         intCastTimer = castTimer;
         animator = GetComponent<Animator>();
@@ -107,10 +110,26 @@ public class BossBehavior : MonoBehaviour {
     {
         timer = intTimer;
         attacking = true;
-
+   
         animator.SetBool("canWalk", false);
         animator.SetBool("Attack", true);
     }
+
+    public void PlayAttackSound()
+    {
+        sounds.Play("BossAttack");
+    }
+
+    public void PlayCastSound()
+    {
+        sounds.Play("BossCast");
+    }
+
+    public void PlayDeathSound()
+    {
+        sounds.Play("BossDie");
+    }
+
 
     void StopAttack()
     {

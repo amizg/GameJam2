@@ -21,12 +21,16 @@ public class EnemyFollowPlayer : MonoBehaviour
     private bool cooldown;
     private float intTimer;
 
+    private bool playSound = true;
+
+    private AudioManager sounds;
 
     // Start is called before the first frame update
     void Start()
     {
         intTimer = timer;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        sounds = FindObjectOfType<AudioManager>();
     }
 
     // Update is called once per frame
@@ -35,6 +39,11 @@ public class EnemyFollowPlayer : MonoBehaviour
         float distanceFromPlayer = Vector2.Distance(player.position, transform.position);
 
         if(distanceFromPlayer < lineOfSight && distanceFromPlayer > combatRange && !cooldown) {
+
+            if (playSound) {
+                sounds.Play("FlyingEyeAlert");
+                playSound = false;
+            }
 
             transform.position = Vector2.MoveTowards(this.transform.position, player.position, speed * Time.deltaTime);
 
@@ -51,6 +60,10 @@ public class EnemyFollowPlayer : MonoBehaviour
         else if (cooldown) {
             Cooldown();
             animator.SetBool("canAttack", false);
+        }
+
+        if (distanceFromPlayer > lineOfSight) {
+            playSound = true;
         }
 
     }

@@ -7,13 +7,17 @@ public class Enemy : MonoBehaviour
 
     public Animator animator;
 
+    private AudioManager sounds;
+
     public int maxHealth;
     private int currHealth;
     private bool isAttacking;
+    private bool isAlive = true;
 
     // Start is called before the first frame update
     void Start()
     {
+        sounds = FindObjectOfType<AudioManager>();
         currHealth = maxHealth;
     }
 
@@ -25,29 +29,30 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (currHealth <= 0 && isAlive) {
+            isAlive = false;
+            Die();
+            return;
+        }
 
-        if (!isAttacking) {
+        if (!isAttacking && isAlive) {
+            sounds.Play("EnemyHit");
             currHealth -= damage;
             animator.SetTrigger("Hit");
-            return;
         }
-        else if (isAttacking) {
+        else if (isAttacking && isAlive) {
             animator.ResetTrigger("Hit");
-            return;
-        }
-
-        if (currHealth <= 0) {
-            Die();
         }
     }
 
     void Die()
     {
-        //Die animation and disable
-        animator.SetTrigger("Die");
-
-        Destroy(gameObject, 1f);
         this.enabled = false;
+        
+        animator.SetTrigger("Die");
+        sounds.Play("EnemyKilled");
+        
+        Destroy(gameObject, 1.5f);
     }
 
     bool checkAttack()
