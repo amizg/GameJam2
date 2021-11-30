@@ -10,6 +10,7 @@ public class EnemyFollowPlayer : MonoBehaviour
     public float combatRange;
     public Animator animator;
 
+    public int damage;
     public Transform attackPoint;
     public float attackRange = 0.5f;
 
@@ -89,7 +90,7 @@ public class EnemyFollowPlayer : MonoBehaviour
         Collider2D[] hitPlayers = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayers);
 
         foreach (Collider2D player in hitPlayers) {
-            player.GetComponent<PlayerController>().TakeDamage(1);
+            player.GetComponent<PlayerController>().TakeDamage(damage);
         }
     }
 

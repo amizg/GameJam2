@@ -225,6 +225,11 @@ public class BossBehavior : MonoBehaviour {
         Instantiate(spellPrefab, new Vector3(player.transform.position.x, player.transform.position.y + 2.4f, 0), Quaternion.identity);
     }
 
+    public void WinGame()
+    {
+        FindObjectOfType<WinMenu>().Win();
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

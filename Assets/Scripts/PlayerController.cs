@@ -276,15 +276,19 @@ public class PlayerController : MonoBehaviour {
         sounds.Play("BuffAcquired");
 
         if(buff == "damage") {
+            FindObjectOfType<BuffMenu>().DamageBuff();
             damageMul = 2;
         }
         else if (buff == "speed") {
+            FindObjectOfType<BuffMenu>().SpeedBuff();
             runSpeed += 10;
         }
         else if (buff == "jump") {
+            FindObjectOfType<BuffMenu>().JumpBuff();
             jumpForce += 3;
         }
         else if(buff == "health") {
+            FindObjectOfType<BuffMenu>().HealthBuff();
             maxHealth += 30;
             currHealth = maxHealth;
         }
