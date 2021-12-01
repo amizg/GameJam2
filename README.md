@@ -1,8 +1,10 @@
 
 # GameJam2
+ Theme - Knight
+ 
  CSC-355
  
- Theme - Knight
+ Fall 2021
  
  University of Michigan - Flint
 
