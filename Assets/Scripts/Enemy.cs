@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-
     public Animator animator;
 
     private AudioManager sounds;
@@ -47,8 +46,9 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+
         this.enabled = false;
-        
+
         animator.SetTrigger("Die");
         sounds.Play("EnemyKilled");
         
@@ -62,5 +62,14 @@ public class Enemy : MonoBehaviour
         }
         else
             return false;
+    }
+
+    public int GetMaxHealth()
+    {
+        return maxHealth;
+    }
+    public int GetCurrHealth()
+    {
+        return currHealth;
     }
 }

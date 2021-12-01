@@ -8,6 +8,8 @@ public class PlayerCollision : MonoBehaviour
 
     private AudioManager sounds;
 
+    public GameObject bossHealth;
+
     private void Awake()
     {
         sounds = FindObjectOfType<AudioManager>();
@@ -22,6 +24,9 @@ public class PlayerCollision : MonoBehaviour
             controller.Die();
         }
         else if (other.tag == "BossArea") {
+            
+            bossHealth.SetActive(true);
+
             sounds.Stop("MainTheme");
             sounds.Play("BossAreaEnter");
             sounds.Play("BossTheme");

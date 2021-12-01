@@ -44,13 +44,18 @@ public class PlayerController : MonoBehaviour {
 
     private AudioManager sounds;
 
+    public HealthBar healthBar;
+    public GameObject bossHealth;
+
     // Start is called before the first frame update
     void Start()
     {
         sounds = FindObjectOfType<AudioManager>();
 
         respawnPoint = transform.position;
+
         currHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
 
         rb = GetComponent<Rigidbody2D>();
         InvokeRepeating("AttackTimer", 0.1f, 0.4f);
@@ -243,13 +248,16 @@ public class PlayerController : MonoBehaviour {
     public void TakeDamage(int damage)
     {
         if (!invul) {
-            CameraShake.Instance.ShakeCamera(damage, .2f);
+            CameraShake.Instance.ShakeCamera(damage * 2, .2f);
             sounds.Play("PlayerHit");
             currHealth -= damage;
             animator.SetTrigger("Hurt");
+
+            healthBar.SetHealth(currHealth);
         }
         else if (invul && isBlocking) {
             sounds.Play("PlayerBlock");
+            CameraShake.Instance.ShakeCamera(damage, .2f);
         }
 
         if (currHealth <= 0 && !invul) {
@@ -269,6 +277,8 @@ public class PlayerController : MonoBehaviour {
         
         rb.velocity = new Vector2 (0, 0);
         this.enabled = false;
+
+        bossHealth.SetActive(false);
     }
 
     public void CollectBuff(string buff)
@@ -291,13 +301,23 @@ public class PlayerController : MonoBehaviour {
             FindObjectOfType<BuffMenu>().HealthBuff();
             maxHealth += 30;
             currHealth = maxHealth;
+            healthBar.SetMaxHealth(maxHealth);
+            healthBar.SetMaxHealth(currHealth);
         }
     }
 
     public void Heal(int amount)
     {
+        sounds.Play("Health");
+
         if (currHealth < maxHealth) {
             currHealth += amount;
+
+            if (currHealth < maxHealth) {
+                currHealth = maxHealth;
+            }
+
+            healthBar.SetHealth(currHealth);
         }
     }
 
@@ -312,7 +332,7 @@ public class PlayerController : MonoBehaviour {
 
         transform.position = respawnPoint;
         currHealth = maxHealth;
-
+        healthBar.SetHealth(currHealth);
     }
 
     public void PlayRollSound()

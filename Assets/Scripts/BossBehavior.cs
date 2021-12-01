@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BossBehavior : MonoBehaviour {
+
     public Transform leftLimit;
     public Transform rightLimit;
     public float attackDistance; // min attack distance
@@ -35,6 +36,10 @@ public class BossBehavior : MonoBehaviour {
 
     private AudioManager sounds;
 
+    public BossHealthBar healthBar;
+    public GameObject bossHealth;
+    public Enemy enemy;
+
     private void Awake()
     {
         sounds = FindObjectOfType<AudioManager>();
@@ -43,6 +48,8 @@ public class BossBehavior : MonoBehaviour {
         intCastTimer = castTimer;
         animator = GetComponent<Animator>();
         SelectTarget();
+
+        SetHealth();
     }
 
     void Update()
@@ -58,6 +65,8 @@ public class BossBehavior : MonoBehaviour {
         if (inRange == true) {
             EnemyBehavior();
         }
+
+        CheckHealth();
     }
 
     void EnemyBehavior()
@@ -159,7 +168,6 @@ public class BossBehavior : MonoBehaviour {
             castCooldown = false;
             castTimer = intCastTimer;
         }
-
     }
 
     public void TriggerCooldown()
@@ -228,6 +236,17 @@ public class BossBehavior : MonoBehaviour {
     public void WinGame()
     {
         FindObjectOfType<WinMenu>().Win();
+        bossHealth.SetActive(false);
+    }
+
+    void SetHealth()
+    {
+        healthBar.SetMaxHealth(enemy.GetMaxHealth());
+    }
+
+    void CheckHealth()
+    {
+        healthBar.SetHealth(enemy.GetCurrHealth());
     }
 
     private void OnDrawGizmosSelected()
