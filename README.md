@@ -1,6 +1,6 @@
 
 # GameJam2
- CSC-355
+ CSC-355 /n
  Theme - Knight
  University of Michigan - Flint
 
