@@ -313,7 +313,7 @@ public class PlayerController : MonoBehaviour {
         if (currHealth < maxHealth) {
             currHealth += amount;
 
-            if (currHealth < maxHealth) {
+            if (currHealth > maxHealth) {
                 currHealth = maxHealth;
             }
 
