@@ -1,7 +1,9 @@
 
 # GameJam2
  CSC-355
+ 
  Theme - Knight
+ 
  University of Michigan - Flint
 
 FrightKnight
