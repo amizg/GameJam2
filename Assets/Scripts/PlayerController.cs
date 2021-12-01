@@ -268,6 +268,8 @@ public class PlayerController : MonoBehaviour {
 
     public void Die()
     {
+        FindObjectOfType<DeathCounter>().IncreaseDeathCount();
+
         sounds.Stop("MainTheme");
         sounds.Play("PlayerDie");
 
