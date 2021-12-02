@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public int maxHealth;
     private int currHealth;
     private bool isAttacking;
-    private bool isAlive = true;
+    public bool isAlive = true;
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +46,6 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-
         this.enabled = false;
 
         animator.SetTrigger("Die");

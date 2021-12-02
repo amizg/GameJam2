@@ -20,6 +20,7 @@ public class SkeletonBehavior : MonoBehaviour {
     private bool attacking;
     private bool cooldown;
     private float intTimer;
+    private bool isAlive = true;
 
     public Transform attackPoint;
     public float attackRange = 0.5f;
@@ -35,15 +36,17 @@ public class SkeletonBehavior : MonoBehaviour {
 
     void Update()
     {
-        if (!attacking) {
+        isAlive = GetComponent<Enemy>().isAlive;
+
+        if (!attacking && isAlive) {
             Move();
         }
 
-        if(!InsideofLimits() && !inRange && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack")) {
+        if(isAlive && !InsideofLimits() && !inRange && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack")) {
             SelectTarget();
         }
         
-        if (inRange == true) {
+        if (inRange == true && isAlive) {
             EnemyBehavior();
         }
     }
@@ -67,7 +70,7 @@ public class SkeletonBehavior : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Player") {
+        if (other.gameObject.tag == "Player" && isAlive) {
             target = other.transform;
             inRange = true;
             Flip();
@@ -136,17 +139,20 @@ public class SkeletonBehavior : MonoBehaviour {
 
     public void SelectTarget()
     {
-        float distanceToLeft = Vector2.Distance(transform.position, leftLimit.position);
-        float distanceToRight = Vector2.Distance(transform.position, rightLimit.position);
+        if (isAlive) {
+            float distanceToLeft = Vector2.Distance(transform.position, leftLimit.position);
+            float distanceToRight = Vector2.Distance(transform.position, rightLimit.position);
 
-        if (distanceToLeft > distanceToRight) {
-            target = leftLimit;
-        }
-        else {
-            target = rightLimit;
+            if (distanceToLeft > distanceToRight) {
+                target = leftLimit;
+            }
+            else {
+                target = rightLimit;
+            }
+
+            Flip();
         }
 
-        Flip();
     }
 
     public void Flip()

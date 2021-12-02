@@ -16,7 +16,7 @@ public class CombatZone : MonoBehaviour
 
     private void Update()
     {
-        if (inRange && !animator.GetCurrentAnimatorStateInfo(0).IsName("Skeleton_Attack")) {
+        if (inRange && !animator.GetCurrentAnimatorStateInfo(0).IsName("Skeleton_Attack") && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Dead")) {
             enemyParent.Flip();
         }
     }
